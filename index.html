@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CS — Ticket System</title>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -173,9 +173,10 @@
       opacity: 1;
     }
   </style>
+
 </head>
 <body>
-  <!--  Navbar -->
+     <!--  Navbar -->
   <nav class="navbar">
     <h2>CS — Ticket System</h2>
     <ul>
@@ -267,187 +268,5 @@
   <!-- Toast -->
   <div id="toast" class="toast"></div>
 
-  <script>
-    const tickets = [
-      {
-        id: 1,
-        title: "Login Issues - Can’t Access Account",
-        description: "Customer unable to log in multiple times after reset.",
-        customer: "John Smith",
-        priority: "High",
-        status: "Open",
-        createdAt: "10/09/2024",
-      },
-      {
-        id: 2,
-        title: "Payment Failed - Card Declined",
-        description: "VISA ending 1234 not working.",
-        customer: "Sarah Johnson",
-        priority: "High",
-        status: "Open",
-        createdAt: "12/09/2024",
-      },
-      {
-        id: 3,
-        title: "Unable to Download Invoice",
-        description: "Invoice button not working.",
-        customer: "Michael Brown",
-        priority: "Medium",
-        status: "Open",
-        createdAt: "15/09/2024",
-      },
-      {
-        id: 4,
-        title: "App Crash on Launch",
-        description: "Customer reports app crashes immediately after opening.",
-        customer: "James Anderson",
-        priority: "High",
-        status: "Open",
-        createdAt: "16/09/2024",
-      },
-      {
-        id: 5,
-        title: "Two-Factor Authentication Issue",
-        description: "Customer not receiving 2FA codes.",
-        customer: "Liam Thomas",
-        priority: "High",
-        status: "Open",
-        createdAt: "17/09/2024",
-      },
-      {
-        id: 6,
-        title: "Subscription Auto-Renewal",
-        description: "Customer charged twice due to auto-renewal bug.",
-        customer: "Sophia Lee",
-        priority: "Medium",
-        status: "Open",
-        createdAt: "18/09/2024",
-      },
-      {
-        id: 7,
-        title: "Refund Not Processed",
-        description: "Refund requested 2 weeks ago but not received.",
-        customer: "David Wilson",
-        priority: "High",
-        status: "Open",
-        createdAt: "19/09/2024",
-      },
-      {
-        id: 8,
-        title: "Incorrect Billing Address",
-        description: "Billing address showing old city after update.",
-        customer: "Emily Davis",
-        priority: "Low",
-        status: "Open",
-        createdAt: "20/09/2024",
-      },
-      {
-        id: 9,
-        title: "Missing Order Confirmation Email",
-        description: "Customer did not get confirmation email after order.",
-        customer: "Isabella Garcia",
-        priority: "Medium",
-        status: "Open",
-        createdAt: "21/09/2024",
-      },
-      {
-        id: 10,
-        title: "Profile Picture Upload Failed",
-        description: "Error while uploading new profile picture.",
-        customer: "Ethan Miller",
-        priority: "Low",
-        status: "Open",
-        createdAt: "22/09/2024",
-      }
-    ];
-
-    let inProgress = [];
-    let resolved = [];
-
-    const ticketList = document.getElementById("ticketList");
-    const taskList = document.getElementById("taskList");
-    const inProgressCount = document.getElementById("inProgressCount");
-    const resolvedCount = document.getElementById("resolvedCount");
-    const toast = document.getElementById("toast");
-
-    //  Show Toast
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2000);
-    }
-
-    //  Render Tickets
-    function renderTickets() {
-      ticketList.innerHTML = "";
-      tickets.forEach((ticket) => {
-        const card = document.createElement("div");
-        card.className = "ticket-card";
-        card.innerHTML = `
-          <h4>${ticket.title}</h4>
-          <p>${ticket.description}</p>
-          <p><strong>Customer:</strong> ${ticket.customer}</p>
-          <p><strong>Priority:</strong> ${ticket.priority}</p>
-          <p><strong>Date:</strong> ${ticket.createdAt}</p>
-          <span class="status ${ticket.status.toLowerCase()}">${ticket.status}</span>
-        `;
-        card.addEventListener("click", () => addToTask(ticket));
-        ticketList.appendChild(card);
-      });
-    }
-
-    //  Add ticket to Task Status
-    function addToTask(ticket) {
-      if (!inProgress.find((t) => t.id === ticket.id)) {
-        inProgress.push(ticket);
-        renderTasks();
-        updateCounts();
-        showToast(`"${ticket.title}" moved to In-Progress`);
-      }
-    }
-
-    //  Complete Task
-    function completeTask(ticketId) {
-      const ticket = inProgress.find((t) => t.id === ticketId);
-      inProgress = inProgress.filter((t) => t.id !== ticketId);
-      resolved.push(ticket);
-
-      // remove from tickets
-      const index = tickets.findIndex((t) => t.id === ticketId);
-      if (index !== -1) tickets.splice(index, 1);
-
-      renderTasks();
-      renderTickets();
-      updateCounts();
-      showToast(`"${ticket.title}" marked as Resolved`);
-    }
-
-    //  Render Tasks
-    function renderTasks() {
-      if (inProgress.length === 0) {
-        taskList.innerHTML = "No tasks in progress";
-        return;
-      }
-      taskList.innerHTML = "";
-      inProgress.forEach((ticket) => {
-        const div = document.createElement("div");
-        div.className = "task-card";
-        div.innerHTML = `
-          <span>${ticket.title}</span>
-          <button onclick="completeTask(${ticket.id})">Complete</button>
-        `;
-        taskList.appendChild(div);
-      });
-    }
-
-    // Update Counts
-    function updateCounts() {
-      inProgressCount.textContent = inProgress.length;
-      resolvedCount.textContent = resolved.length;
-    }
-
-    // Init
-    renderTickets();
-  </script>
 </body>
 </html>
