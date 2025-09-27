@@ -389,7 +389,73 @@
           <h4>${ticket.title}</h4>
           <p>${ticket.description}</p>
           <p><strong>Customer:</strong> 
+       
+${ticket.customer}</p>
+          <p><strong>Priority:</strong> ${ticket.priority}</p>
+          <p><strong>Date:</strong> ${ticket.createdAt}</p>
+          <span class="status ${ticket.status.toLowerCase()}">${ticket.status}</span>
+        `;
+        card.addEventListener("click", () => addToTask(ticket));
+        ticketList.appendChild(card);
+      });
+    }
 
+    //  Add ticket to Task Status
+    function addToTask(ticket) {
+      if (!inProgress.find((t) => t.id === ticket.id)) {
+        inProgress.push(ticket);
+        renderTasks();
+        updateCounts();
+        showToast(`"${ticket.title}" moved to In-Progress`);
+      }
+    }
 
+    //  Complete Task
+    function completeTask(ticketId) {
+      const ticket = inProgress.find((t) => t.id === ticketId);
+      inProgress = inProgress.filter((t) => t.id !== ticketId);
+      resolved.push(ticket);
+
+      // remove from tickets
+      const index = tickets.findIndex((t) => t.id === ticketId);
+      if (index !== -1) tickets.splice(index, 1);
+
+      renderTasks();
+      renderTickets();
+      updateCounts();
+      showToast(`"${ticket.title}" marked as Resolved`);
+    }
+
+    //  Render Tasks
+    function renderTasks() {
+      if (inProgress.length === 0) {
+        taskList.innerHTML = "No tasks in progress";
+        return;
+      }
+      taskList.innerHTML = "";
+      inProgress.forEach((ticket) => {
+        const div = document.createElement("div");
+        div.className = "task-card";
+        div.innerHTML = `
+          <span>${ticket.title}</span>
+          <button onclick="completeTask(${ticket.id})">Complete</button>
+        `;
+        taskList.appendChild(div);
+      });
+    }
+
+    // Update Counts
+    function updateCounts() {
+      inProgressCount.textContent = inProgress.length;
+      resolvedCount.textContent = resolved.length;
+    }
+
+    // Init
+    renderTickets();
+  </script>
 </body>
 </html>
+
+
+
+
